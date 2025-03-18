@@ -37,10 +37,9 @@ export default function Dashboard() {
         { id: 2, name: "Dr. Jane Smith", specialty: "Dermatologist", img: "doctor3.jpg" },
         { id: 3, name: "Dr. Emily White", specialty: "Pediatrician", img: "doctor4.jpg" },
         { id: 4, name: "Dr. Mark Brown", specialty: "Orthopedic", img: "doctor5.png" },
-        { id: 5, name: "Dr. Sarah Connor", specialty: "Neurologist", img: "doctor6.jpg" },
-        { id: 6, name: "Dr. Alex Johnson", specialty: "ENT Specialist", img: "doctor7.jpg" },
-        { id: 7, name: "Dr. Kevin Harris", specialty: "General Physician", img: "doctor8.jpg" },
-        { id: 8, name: "Dr. Sophia Lee", specialty: "Ophthalmologist", img: "doctor9.jpg" },
+        { id: 5, name: "Dr. Sarah Connor", specialty: "Neurologist", img: "doctor-5.jpg" },
+        { id: 6, name: "Dr. Alex Johnson", specialty: "ENT Specialist", img: "doctor-6.jpg" },
+        { id: 7, name: "Dr. Kevin Harris", specialty: "General Physician", img: "doctor-7.jpg" },
     ];
 
 
