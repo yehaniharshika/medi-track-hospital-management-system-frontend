@@ -316,10 +316,6 @@ const MedicalReportSection = () => {
 
 
 
-
-
-
-
     return (
         <>
             <div className="flex overflow-hidden bg-emerald-200">
@@ -377,9 +373,9 @@ const MedicalReportSection = () => {
                         </div>
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
-                                <Modal.Title className="font-bold" style={{fontFamily: "'Ubuntu', sans-serif"}}>Medical Report Details Form</Modal.Title>
+                                <Modal.Title className="font-bold" style={{fontFamily: "'Montserrat', serif",fontWeight:"600"}}>Medical Report Details Form</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body className="bg-blue-300">
+                            <Modal.Body style={{backgroundColor:"#cec4ff"}}>
                                 <Form>
                                     <Form.Group className="mb-3">
                                         <Form.Label className="font-bold" style={{fontFamily: "'Ubuntu', sans-serif"}}>Report ID</Form.Label>
@@ -570,7 +566,7 @@ const MedicalReportSection = () => {
 
                                 <Button
                                     className="bg-blue-500 text-white px-3 h-[43px] py-1 rounded-md hover:bg-red-700"
-                                    style={{fontFamily: "'Montserrat', serif", fontSize: "13px", fontWeight: "bold"}}
+                                    style={{fontFamily: "'Montserrat', serif", fontSize: "14px", fontWeight: "bold"}}
                                     onClick={generateReport}>Generate Report
                                 </Button>
                             </Modal.Footer>

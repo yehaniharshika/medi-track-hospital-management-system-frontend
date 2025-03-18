@@ -297,9 +297,9 @@ const NurseSection = () => {
                         </div>
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
-                                <Modal.Title className="font-bold" style={{fontFamily: "'Ubuntu', sans-serif"}}>Nurse Details Form</Modal.Title>
+                                <Modal.Title className="font-bold" style={{fontFamily: "'Montserrat', serif",fontWeight:"600"}}>Nurse Details Form</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body className="bg-blue-300">
+                            <Modal.Body style={{backgroundColor:"#cec4ff"}}>
                                 <Form>
                                     <Form.Group className="mb-3">
                                         <Form.Label className="font-bold" style={{fontFamily: "'Ubuntu', sans-serif"}}>Nurse ID</Form.Label>

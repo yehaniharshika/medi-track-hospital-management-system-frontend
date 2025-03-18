@@ -265,9 +265,9 @@ const AppointmentSection = () => {
 
                         <Modal show={show} onHide={handleClose}>
                             <Modal.Header closeButton>
-                                <Modal.Title className="font-bold" style={{fontFamily: "'Ubuntu', sans-serif"}}>Appointment Details Form</Modal.Title>
+                                <Modal.Title className="font-bold" style={{fontFamily: "'Montserrat', serif",fontWeight:"600"}}>Appointment Details Form</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body className="bg-blue-300">
+                            <Modal.Body style={{backgroundColor:"#cec4ff"}}>
                                 <Form>
                                     <Form.Group className="mb-3">
                                         <Form.Label className="font-bold" style={{fontFamily: "'Ubuntu', sans-serif"}}>Appointment Code</Form.Label>
