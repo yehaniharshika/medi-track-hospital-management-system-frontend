@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [medicineCount, setMedicineCount] = useState(0);
   const [appointmentCount, setAppointmentCount] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
+  
 
   // PRESERVED DATA
   const incomeData = [
@@ -73,6 +74,8 @@ export default function Dashboard() {
 
         <main className="flex-1 overflow-auto p-4 md:p-6 custom-scrollbar-horizontal">
           <Container fluid>
+            {/* Welcome Message */}
+        
             {/* Stats Cards */}
             <Row className="gx-4 gy-4">
               {[
