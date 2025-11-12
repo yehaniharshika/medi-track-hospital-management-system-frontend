@@ -10,12 +10,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../store/Store.ts";
 import {Medicine} from "../models/Medicine.ts";
 import {deleteMedicine, getMedicines, saveMedicine, updateMedicine} from "../reducers/MedicineSlice.ts";
+import { Header } from "../components/Header.tsx";
 
 const MedicineSection = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [medicineId, setMedicineId] = useState("");
     const [medicineName, setMedicineName] = useState("");
     const [brand, setBrand] = useState("");
@@ -170,46 +172,13 @@ const MedicineSection = () => {
 
     return (
         <>
-            <div className="flex overflow-hidden bg-emerald-200">
-                <Navigation/>
-                <div className="flex-1 p-5" style={{backgroundColor: "#cec4ff"}}>
+            <div className="flex overflow-hidden bg-purple-500">
+                <Navigation isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+                <div className="flex-1" style={{backgroundColor: "#cec4ff"}}>
+                    <Header onMenuClick={() => setSidebarOpen(true)} />
                     <Container fluid>
-                        <Row className="align-items-center mb-3">
-                            <Col md={12}>
-                                <motion.div
-                                    className="p-3 rounded top-50"
-                                    style={{backgroundColor: "#8854d0"}}
-                                    initial={{opacity: 0, y: -50}}
-                                    animate={{opacity: 1, y: 0}}
-                                    transition={{duration: 0.8, ease: "easeOut"}}
-                                    whileHover={{
-                                        scale: 1.02,
-                                        boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
-                                    }}
-                                >
-                                    <Container fluid>
-                                        <Row className="align-items-center">
-                                            <motion.h4
-                                                className="font-bold text-2xl text-neutral-100"
-                                                style={{fontFamily: "'Ubuntu', sans-serif",
-                                                    fontWeight: "bold",color: "white"}}
-                                                initial={{scale: 0.8, opacity: 0}}
-                                                animate={{scale: 1, opacity: 1}}
-                                                transition={{
-                                                    delay: 0.2,
-                                                    duration: 0.6,
-                                                    ease: "easeOut",
-                                                }}
-                                            >
-                                                Medicine Management
-                                            </motion.h4>
-                                        </Row>
-                                    </Container>
-                                </motion.div>
-                            </Col>
-                        </Row>
-                        <br/>
-                        <div className="flex justify-between items-center mb-4">
+                        
+                        <div className="flex justify-between items-center mb-4 mt-5">
                             <Button
                                 variant="primary"
                                 onClick={handleShow}

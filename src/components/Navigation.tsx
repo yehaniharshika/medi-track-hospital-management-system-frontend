@@ -1,148 +1,176 @@
-import {NavLink} from "react-router-dom";
+// components/Navigation.tsx
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { AiOutlineAppstore } from "react-icons/ai";
 import {
-    FaFileMedical,
-    FaGear,
-    FaHouseMedicalCircleCheck, FaPersonCirclePlus,
-    FaUserDoctor,
-    FaUserNurse
+  FaFileMedical, FaGear, FaHouseMedicalCircleCheck,
+  FaPersonCirclePlus, FaUserDoctor, FaUserNurse,
 } from "react-icons/fa6";
+import { RiCloseLine } from "react-icons/ri";
+import { GiMedicines } from "react-icons/gi";
+import { LuCalendarPlus2 } from "react-icons/lu";
+import { AiOutlineAppstore } from "react-icons/ai";
+import { FaMoneyCheckAlt, FaSignOutAlt } from "react-icons/fa";
 
-import {FaMoneyCheckAlt, FaSignOutAlt} from "react-icons/fa";
+interface NavigationProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
+export const Navigation = ({ isOpen, onClose }: NavigationProps) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
 
-import {RiMenu3Line} from "react-icons/ri";
-import {GiMedicines} from "react-icons/gi";
-import {LuCalendarPlus2} from "react-icons/lu";
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("refreshToken");
+    onClose();
+    navigate("/login", { replace: true });
+  };
 
+  return (
+    <>
+      {/* Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-[998] md:hidden"
+          onClick={onClose}
+        />
+      )}
 
-export const Navigation = () => {
+      {/* Mobile Drawer (Right) */}
+      <aside
+        className={`
+          fixed top-0 right-0 h-full bg-purple-500 text-white z-[999] w-64
+          transition-transform duration-300 ease-in-out shadow-2xl
+          ${isOpen ? "translate-x-0" : "translate-x-full"}
+          md:hidden
+        `}
+      >
+        <div className="flex flex-col h-full">
+          <div className="py-4 px-4 flex justify-between items-center border-b border-purple-400">
+            <h1 className="text-[16px] font-bold">MediTrack</h1>
+            <button onClick={onClose} className="text-white">
+              <RiCloseLine size={26} />
+            </button>
+          </div>
 
-    const [open, setOpen] = useState(true);
+          <nav className="flex-1 overflow-y-auto py-4 custom-scrollbar">
+            <ul className="space-y-1 px-3">
+              {navItems.map((item) =>
+                item.to === "/logout" ? (
+                  <li key={item.to}>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 p-3 rounded-lg text-sm font-medium text-left
+                                 text-white hover:bg-violet-400 hover:text-white transition-all duration-300"
+                    >
+                      <span className="min-w-[24px] flex justify-center">{item.icon}</span>
+                      <span className="whitespace-nowrap">{item.label}</span>
+                    </button>
+                  </li>
+                ) : (
+                  <li key={item.to}>
+                    <NavLink
+                      to={item.to}
+                      end
+                      onClick={onClose}
+                      className="flex items-center gap-3 p-3 rounded-lg text-sm font-medium text-left
+                                 text-white hover:bg-violet-400 hover:text-white transition-all duration-300
+                                 [&.active]:bg-violet-400 [&.active]:text-blue-950 [&.active]:shadow-md"
+                      style={{ textDecoration: "none", color: "white" }} // ← Force white + no underline
+                    >
+                      <span className="min-w-[24px] flex justify-center">{item.icon}</span>
+                      <span className="whitespace-nowrap">{item.label}</span>
+                    </NavLink>
+                  </li>
+                )
+              )}
+            </ul>
+          </nav>
+        </div>
+      </aside>
 
-    return (
-        <section className="flex gap-3 bg-purple-500">
-            {/* Sidebar container */}
-            <div
-                className={`z-[999] h-screen ${open ? 'w-64' : 'w-28'} duration-500 text-gray-100 px-4 md:relative fixed top-0`}>
-                {/* Logo Section */}
+      {/* Desktop Sidebar */}
+      <aside
+        className={`
+          hidden md:block h-full bg-purple-500 text-white transition-all duration-300
+          ${collapsed ? "w-20" : "w-64"}
+        `}
+      >
+        <div className="flex flex-col h-full">
+          <div className="py-4 px-4 flex justify-between items-center border-b border-purple-400">
+            
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="text-white p-2 hover:bg-purple-600 rounded"
+            >
+              <RiCloseLine size={22} />
+            </button>
+          </div>
 
-                <div className="py-3 flex justify-end">
-                    <RiMenu3Line size={24} className="cursor-pointer" onClick={() => setOpen(!open)}/>
-                </div>
-
-                <div className="flex justify-center items-center font-medium border-b border-gray-300 py-3 px-4">
-                    <img
-                        src="/src/images/LOGO.png"
-                        alt="Logo"
-                        width={open ? 180 : 180}
-                        className="transition-all duration-300"
-                    />
-                </div>
-
-
-                <div className="flex flex-col h-full">
-                    <ul className="whitespace-pre px-3 text-[0.9rem] py-5 flex flex-col gap-3 font-bold overflow-x-hidden">
-                        <li>
-                            <NavLink
-                                to="/dashboard"
-                                className={({isActive}) => `flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <AiOutlineAppstore size={24} className="min-w-max"/>Dashboard
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink to="/department" className={({isActive}) =>`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaHouseMedicalCircleCheck  size={24} className="min-w-max"/>Department
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/doctor" className={({isActive}) => `flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaUserDoctor size={24} className="min-w-max"/>Doctor
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/nurse" className={({isActive}) => `flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaUserNurse size={24} className="min-w-max"/>Nurse
-
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/patient" className={({isActive}) =>`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaPersonCirclePlus  size={24} className="min-w-max"/>Patient
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/appointment" className={({isActive}) =>`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <LuCalendarPlus2 size={24} className="min-w-max"/>appointment
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/medicine" className={({isActive}) =>`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <GiMedicines  size={24} className="min-w-max"/>Medicine
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/report" className={({isActive}) => `flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaFileMedical  size={24} className="min-w-max"/>Medical Report
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/payment" className={({isActive}) =>`flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaMoneyCheckAlt  size={24} className="min-w-max"/>Payment
-                            </NavLink>
-                        </li>
-
-                        <br/>
-                        <li>
-                            <NavLink to="/setting" className={({isActive}) => `flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaGear  size={24} className="min-w-max"/>
-                                Settings
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/logout" className={({isActive}) => `flex items-center gap-3 p-2 rounded-lg transition-all duration-300 text-[15.5px] 
-                                ${isActive ? "bg-violet-400 text-blue-950 shadow-md scale-105" : "text-gray-800"} 
-                                hover:bg-violet-400 hover:text-white hover:scale-105 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]`}
-                                     style={{fontFamily: "'Ubuntu', sans-serif", textDecoration: "none",color: "white"}}>
-                                <FaSignOutAlt size={24} className="min-w-max"/>
-                                Log Out
-                            </NavLink>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    );
+          <nav className="flex-1 overflow-y-auto py-4 custom-scrollbar">
+            <ul className="space-y-1 px-3">
+              {navItems.map((item) =>
+                item.to === "/logout" ? (
+                  <li key={item.to}>
+                    <button
+                      onClick={handleLogout}
+                      className={`w-full flex items-center gap-3 p-3 rounded-lg text-sm font-medium text-left
+                                 text-white hover:bg-violet-400 hover:text-white transition-all duration-300
+                                 ${collapsed ? "justify-center" : ""}`}
+                    >
+                      <span className="min-w-[24px] flex justify-center">{item.icon}</span>
+                      <span
+                        className={`transition-all ${
+                          collapsed ? "opacity-0 w-0" : "opacity-100"
+                        } overflow-hidden whitespace-nowrap`}
+                      >
+                        {item.label}
+                      </span>
+                    </button>
+                  </li>
+                ) : (
+                  <li key={item.to}>
+                    <NavLink
+                      to={item.to}
+                      end
+                      className="flex items-center gap-3 p-3 rounded-lg text-sm font-medium text-left
+                                 text-white hover:bg-violet-400 hover:text-white transition-all duration-300
+                                 [&.active]:bg-violet-400 [&.active]:text-blue-950 [&.active]:shadow-md
+                                 ${collapsed ? 'justify-center' : ''}"
+                      style={{ textDecoration: "none", color: "white" }} // ← Critical
+                    >
+                      <span className="min-w-[24px] flex justify-center">{item.icon}</span>
+                      <span
+                        className={`transition-all ${
+                          collapsed ? "opacity-0 w-0" : "opacity-100"
+                        } overflow-hidden whitespace-nowrap`}
+                      >
+                        {item.label}
+                      </span>
+                    </NavLink>
+                  </li>
+                )
+              )}
+            </ul>
+          </nav>
+        </div>
+      </aside>
+    </>
+  );
 };
+
+const navItems = [
+  { to: "/dashboard", label: "Dashboard", icon: <AiOutlineAppstore size={22} /> },
+  { to: "/department", label: "Department", icon: <FaHouseMedicalCircleCheck size={22} /> },
+  { to: "/doctor", label: "Doctor", icon: <FaUserDoctor size={22} /> },
+  { to: "/nurse", label: "Nurse", icon: <FaUserNurse size={22} /> },
+  { to: "/patient", label: "Patient", icon: <FaPersonCirclePlus size={22} /> },
+  { to: "/appointment", label: "Appointment", icon: <LuCalendarPlus2 size={22} /> },
+  { to: "/medicine", label: "Medicine", icon: <GiMedicines size={22} /> },
+  { to: "/report", label: "Medical Report", icon: <FaFileMedical size={22} /> },
+  { to: "/payment", label: "Payment", icon: <FaMoneyCheckAlt size={22} /> },
+  { to: "/setting", label: "Settings", icon: <FaGear size={22} /> },
+  { to: "/logout", label: "Log Out", icon: <FaSignOutAlt size={22} /> },
+];

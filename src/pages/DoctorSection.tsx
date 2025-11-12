@@ -11,6 +11,7 @@ import {AppDispatch, RootState} from "../store/Store.ts";
 import { deleteDoctor, getDoctors, saveDoctor, updateDoctor} from "../reducers/DoctorSlice.ts";
 import {Doctor} from "../models/Doctor.ts";
 import Swal from "sweetalert2";
+import { Header } from "../components/Header.tsx";
 
 
 const DoctorSection = () => {
@@ -29,6 +30,7 @@ const DoctorSection = () => {
     const [departmentId, setDepartmentId] = useState("");
     const [departmentIds, setDepartmentIds] = useState<string[]>([]);
     const dispatch = useDispatch<AppDispatch>();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const doctors = useSelector((state : RootState) => state.doctors);
     const departments = useSelector((state: RootState) => state.departments);
@@ -123,7 +125,7 @@ const DoctorSection = () => {
 
     useEffect(() => {
         dispatch(getDoctors()).then((response) => {
-            const nextDoctorId = generateNextDoctorId(response.payload);
+            const nextDoctorId = generateNextDoctorId(response.payload as Doctor[]);
             setDoctorId(nextDoctorId); //automatically set the generated ID
         });
     }, [dispatch]);
@@ -182,7 +184,7 @@ const DoctorSection = () => {
         });
 
         resetForm();
-        setDoctorId(generateNextDoctorId(doctors));
+        setDoctorId(generateNextDoctorId(doctors as Doctor[]));
         handleClose();
     };
 
@@ -213,7 +215,7 @@ const DoctorSection = () => {
             dispatch(getDoctors());
         });
         resetForm();
-        setDoctorId(generateNextDoctorId(doctors));
+        setDoctorId(generateNextDoctorId(doctors as Doctor[]));
         handleClose();
     }
 
@@ -225,46 +227,13 @@ const DoctorSection = () => {
 
     return (
         <>
-            <div className="flex overflow-hidden bg-emerald-200">
-                <Navigation/>
-                <div className="flex-1 p-5" style={{backgroundColor: "#cec4ff"}}>
+            <div className="flex overflow-hidden bg-purple-500">
+                <Navigation isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+                <div className="flex-1" style={{backgroundColor: "#cec4ff"}}>
+                    <Header onMenuClick={() => setSidebarOpen(true)} />
                     <Container fluid>
-                        <Row className="align-items-center mb-3">
-                            <Col md={12}>
-                                <motion.div
-                                    className="p-3 rounded top-50"
-                                    style={{backgroundColor: "#8854d0"}}
-                                    initial={{opacity: 0, y: -50}}
-                                    animate={{opacity: 1, y: 0}}
-                                    transition={{duration: 0.8, ease: "easeOut"}}
-                                    whileHover={{
-                                        scale: 1.02,
-                                        boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
-                                    }}
-                                >
-                                    <Container fluid>
-                                        <Row className="align-items-center">
-                                            <motion.h4
-                                                className="font-bold text-2xl text-neutral-100"
-                                                style={{fontFamily: "'Ubuntu', sans-serif",
-                                                fontWeight: "bold",color: "white"}}
-                                                initial={{scale: 0.8, opacity: 0}}
-                                                animate={{scale: 1, opacity: 1}}
-                                                transition={{
-                                                    delay: 0.2,
-                                                    duration: 0.6,
-                                                    ease: "easeOut",
-                                                }}
-                                            >
-                                                Doctors Management
-                                            </motion.h4>
-                                        </Row>
-                                    </Container>
-                                </motion.div>
-                            </Col>
-                        </Row>
-                        <br/>
-                        <div className="flex justify-between items-center mb-4">
+                        
+                        <div className="flex justify-between items-center mb-4 mt-5">
                             {/* Add Doctor Button */}
                             <Button
                                 variant="primary"
@@ -451,7 +420,7 @@ const DoctorSection = () => {
                                                     {doctor.doctorImg ? (
                                                         <img src={`data:image/jpeg;base64,${doctor.doctorImg}`}
                                                              alt="Patient Image"
-                                                             className="w-[60px] h-[60px] object-cover rounded-full"/>
+                                                             className="w-[40px] h-[0px] object-cover rounded-full"/>
                                                     ) : (
                                                         <span>No Image</span>
                                                     )}

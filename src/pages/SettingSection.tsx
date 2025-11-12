@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { User } from "../models/User.ts";
 import './style/setting.css';
+import { Header } from "../components/Header.tsx";
 
 interface SettingSectionProps {
     user?: User;
@@ -12,6 +13,7 @@ interface SettingSectionProps {
 
 const SettingSection: React.FC<SettingSectionProps> = ({ user }) => {
     const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -22,28 +24,16 @@ const SettingSection: React.FC<SettingSectionProps> = ({ user }) => {
     };
 
     return (
-        <div className="flex overflow-hidden bg-emerald-200">
-            <Navigation />
-            <div className="flex-1 p-5" style={{ backgroundColor: "#cec4ff" }}>
+        <div className="flex overflow-hidden bg-purple-500">
+            <Navigation isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <div className="flex-1" style={{ backgroundColor: "#cec4ff" }}>
+                <Header onMenuClick={() => setSidebarOpen(true)} />
                 <Container fluid>
-                    <Row className="align-items-center mb-3">
-                        <Col md={12}>
-                            <motion.div
-                                className="p-3 rounded top-50"
-                                style={{ backgroundColor: "#8854d0" }}
-                                initial={{ opacity: 0, y: -50 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
-                                whileHover={{ scale: 1.02 }}
-                            >
-                                <motion.h4 className="font-bold text-2xl text-white">Settings</motion.h4>
-                            </motion.div>
-                        </Col>
-                    </Row>
+                    
 
-                    <Col md={9} className="p-4">
+                    <Col md={9} className="mt-5">
                         <Card>
-                            <Card.Body>
+                            <Card.Body className="items-center justify-center">
                                 <h5 className="mt-4" style={{fontFamily: "'Montserrat', serif",color: "darkblue",fontWeight: "bold"}}>General Information</h5>
                                 <p style={{fontFamily: "'Montserrat', serif" , fontSize: "15px"}}>Manage your personal details and profile picture.</p>
 
